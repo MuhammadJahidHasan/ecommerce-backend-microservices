@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 
@@ -17,5 +17,11 @@ export class ProductController {
         const parsedLimit = parseInt(limit, 10);
 
         return this.productService.getAll(parsedOffset, parsedLimit);
+    }
+
+    @Get('/:productId')
+    async getProduct(@Param('productId') productId: string) {
+        const parsedproductId = parseInt(productId);
+        return this.productService.get(parsedproductId);
     }
 }
