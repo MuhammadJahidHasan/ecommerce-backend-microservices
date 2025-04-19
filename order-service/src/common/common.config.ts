@@ -22,6 +22,10 @@ export const APP_CONFIG = {
         SYNCHRONIZE: process.env.IS_SYNCHRONIZE_DB && process.env.IS_SYNCHRONIZE_DB === 'true' ? true : false,
         DEBUG: process.env.DB_DEBUG || false,
     },
+    MESSAGE_QUEUE: {
+        RABBITMQ_URL: process.env.RABBITMQ_URL!,
+        RABBITMQ_EMAIL_QUEUE: process.env.RABBITMQ_EMAIL_QUEUE!,
+    },
 };
 
 export const AppConfigSchema = Joi.object({
@@ -33,6 +37,8 @@ export const AppConfigSchema = Joi.object({
     DB_USERNAME: Joi.string().required(),
     DB_PASSWORD: Joi.string().required(),
     PRODUCT_SERVICE_URL: Joi.string().required(),
+    RABBITMQ_URL: Joi.string().uri().required(),
+    RABBITMQ_EMAIL_QUEUE: Joi.string().required(),
 });
 
 export const DATA_SOURCE_OPTIONS: DataSourceOptions = {

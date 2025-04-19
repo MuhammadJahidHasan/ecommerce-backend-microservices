@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_CONFIG, AppConfigSchema, DATA_SOURCE_OPTIONS } from './common/common.config';
-import { UtilsModule } from './utils/utils.module';
+import { SharedModule } from './shared/shared.module';
 import { OrderModule } from './order/order.module';
 
 @Module({
@@ -16,7 +16,7 @@ import { OrderModule } from './order/order.module';
         TypeOrmModule.forRootAsync({
             useFactory: async () => DATA_SOURCE_OPTIONS,
         }),
-        UtilsModule,
+        SharedModule,
         OrderModule,
     ],
     controllers: [AppController],
