@@ -1,0 +1,12 @@
+export enum PAYMENT_STATUS {
+    PAID = 'PAID',
+    UNPAID = 'UNPAID',
+}
+
+export enum ORDER_STATUS {
+    PENDING = 'PENDING',
+    PAID = 'PAID',
+    SHIPPED = 'SHIPPED',
+    DELIVERED = 'DELIVERED',
+    CANCELLED = 'CANCELLED',
+}

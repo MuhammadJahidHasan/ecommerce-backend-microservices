@@ -60,4 +60,30 @@ export class ProductService {
             totalCount,
         };
     }
+
+    async get(id: number) {
+        const product = await this.dbEntityService.getProduct(id);
+        if (!product) {
+            throw new BadRequestException(ERROR_CODES.E_INVALID_DATA, 'No product found');
+        }
+        const subCategory = product.subCategory;
+        const category = subCategory?.category;
+
+        return {
+            productId: product.id,
+            name: product.name,
+            sku: product.sku,
+            image: product.image,
+            description: product.description,
+            price: product.price,
+            category: {
+                id: category?.id,
+                name: category?.name,
+            },
+            subCategory: {
+                id: subCategory?.id,
+                name: subCategory?.name,
+            },
+        };
+    }
 }

@@ -19,6 +19,7 @@ export abstract class IDbEntityService {
     abstract getSubCategory(id: number): Promise<ISubCategory | null>;
     abstract createProduct(data: Partial<IProduct>): Promise<IProduct | null>;
     abstract getAllProduct(offset: number, limit: number): Promise<{ products: IProduct[]; offset: number; limit: number; totalCount: number }>;
+    abstract getProduct(id: number): Promise<IProduct | null>;
 }
 
 @Injectable()
@@ -109,5 +110,14 @@ export class DbEntityService implements IDbEntityService {
             limit,
             totalCount,
         };
+    }
+
+    async getProduct(id: number): Promise<IProduct | null> {
+        return this.productRepo.findOne({
+            where: {
+                id,
+            },
+            relations: ['subCategory', 'subCategory.category'],
+        });
     }
 }
