@@ -65,7 +65,7 @@ REDIS_URL=redis://localhost:6379
 You can start services individually:
 ```bash
 # Example
-cd services/auth-service
+cd auth-service
 npm run start:dev
 ```
 Repeat this for each service (`product-service`, `cart-service`, etc.)
