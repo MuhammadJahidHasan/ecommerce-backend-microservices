@@ -3,12 +3,13 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { HTTP_METHOD, IAuthUser } from '../common/common.constant';
 import { IDbEntityService } from '../db-entity/db-entity.service';
 import { ORDER_STATUS, PAYMENT_STATUS } from './order.constant';
-import { AxiosService, IHttpRequestService } from '../utils/http-service/axios.service';
-import { APP_CONFIG } from 'src/common/common.config';
+import { AxiosService, IHttpRequestService } from '../shared/http-service/axios.service';
+import { APP_CONFIG } from '../common/common.config';
+import { IMQService } from '../shared/mq-service/mq-service.interface';
 
 @Injectable()
 export class OrderService {
-    constructor(private readonly dbEntityService: IDbEntityService, private readonly httpsService: IHttpRequestService) {}
+    constructor(private readonly dbEntityService: IDbEntityService, private readonly httpsService: IHttpRequestService, private readonly mqService: IMQService) {}
 
     async createOrder(user: IAuthUser, dto: CreateOrderDto) {
         const { gateway, shippingAddress, items } = dto;
@@ -62,6 +63,12 @@ export class OrderService {
         await this.dbEntityService.createOrderTransaction(order, orderItems);
 
         //TODO: Call the payment gateway to process the payment
+        const message = {
+            context: 'Your order is being processed',
+            subject: 'Order Confirmation',
+            to: user.email,
+        };
+        await this.mqService.publishToQueue(APP_CONFIG.MESSAGE_QUEUE.RABBITMQ_EMAIL_QUEUE, JSON.stringify(message));
 
         return {
             paymentUrl: 'https://payment-gateway.com/checkout', //TODO: Get this from the payment gateway
